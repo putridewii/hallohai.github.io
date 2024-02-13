@@ -1,0 +1,88 @@
+$(document).ready(function () {
+    $(".select2-header").select2({
+        dropdownCssClass: "navbar-dropdown",
+        dropdownParent: $('.select2-header').parent()
+    });
+    $(".select2-footer").select2({
+        dropdownCssClass: "footer-dropdown",
+    });
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip({ trigger: "hover"});
+    });
+
+    //when "tandai sudah dibaca" got clicked
+    $("#notification-dropdown").click(function (e) {
+        if ($(e.target).hasClass("read-notif")) {
+            $(e.target).parent().parent().addClass("read");
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+    $(".abrev-lang-head").html($(".lang").val());
+    $(".select2-header").change(function (e) {
+        $(".abrev-lang-head").html(e.target.value);
+        let title = e.target.options[e.target.selectedIndex].innerHTML;
+        $(".lang-container .btn").attr(
+            "data-original-title",
+            "Language: " + title
+        );
+        e.preventDefault();
+    });
+
+    $(".select2.lang").trigger({
+        type: "select2:select",
+        params: { data: { text: $(".select2.lang option:selected").text() } },
+    });
+    $(".select2-header").on("select2:select", function (e) {
+        $(".abrev-lang-head").html($(".select2.lang").val());
+        $("#lang-head-tooltip")
+            .attr("data-original-title", e.params.data.text)
+            .attr("data-original-title", e.params.data.text)
+            .tooltip("update")
+            .tooltip("hide");
+    });
+
+    $(".select2").on("select2:open", function (e) {
+        $(e.target).parent().toggleClass("rotate");
+    });
+    $(".select2").on("select2:close", function (e) {
+        $(e.target).parent().toggleClass("rotate");
+    });
+});
+
+$(document).ready(function () {
+    $(".abrev-lang-head").html($(".select2.lang").val());
+    $(".select2.lang").trigger({
+        type: "select2:select",
+        params: { data: { text: $(".select2.lang option:selected").text() } },
+    });
+});
+
+$(function() {
+    $('#languageSelect').on('change', function() {
+        let data = {
+            lang: $(this).val(),
+            uri_redirect: window.location.href
+        }
+        console.log(data)
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            url: base_url+'int/lang?is_user=1',
+            data: data,
+            success: function(data) {
+                location.reload()
+            } 
+        })
+    })
+})
+
+$(document).ready(function() {
+    $('text').each(function() {
+        if($(this).attr('class') == 'static-text') {
+            $(this).html('&nbsp;'+$(this).data('text'));
+            $('.static-link-container').show();
+        }
+    })
+})

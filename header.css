@@ -1,0 +1,134 @@
+/* header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+} */
+header button, label, p, a, span, h1, h2, h3, h4, h5, h6 {
+    font-family: "Open Sans", sans-serif !important;
+    overflow-wrap: break-word !important;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+header .navbar {
+    background: white;
+    height: 55px;
+    font-family: "Open Sans", sans-serif;
+    --font-size-eleven: 0.967rem;
+    box-shadow: 0px 1px 0px #00000029;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    padding: 8px 16px;
+    padding-right: 20px;
+}
+
+header .header-pro-logo {
+    height: 39px;
+    width: 39px;
+    object-fit: contain;
+}
+
+header .nav-item {
+    position: relative;
+}
+
+header .nav-item:last-of-type {
+    padding-right: 0 !important;
+}
+
+header .nav-item:last-of-type .nav-link {
+    padding-right: 0 !important;
+}
+
+header nav .nav-link {
+    font-size: 1rem;
+    color: black;
+    position: relative;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+}
+
+header .menu-text {
+    max-width: 72px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 16px;
+    margin-left: 8px!important
+}
+
+header .dropdown-menu {
+    border-radius: 15px;
+    padding: 0.5rem 0;
+    max-width: 270px;
+    min-width: 215px;
+    border: 1px solid #d9d9d9;
+    /* height: calc(100vh - 50px); */
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+header .dropdown-menu .nav-link {
+    height: auto;
+}
+
+header .dropdown-item {
+    padding: 8px 16px !important;
+}
+
+header .dropdown-item .text {
+    margin-left: 0.7rem;
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+header .nav-link .icon {
+    font-size: 16px;
+}
+
+header #menuDropdown .nav-link i {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    header .navbar-nav {
+        flex-direction: row;
+    }
+    
+    header .navbar-expand-md .navbar-nav .nav-link {
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+    }
+
+    header .navbar-nav .dropdown-menu {
+        position: absolute;
+    }
+
+    header .navbar-expand-md .navbar-nav .nav-link {
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+    }
+}
+
+@media (max-width: 400px) {
+    header .nav-item {
+        position: static;
+    }
+
+    header .navbar-expand-md .navbar-nav .nav-link {
+        padding-left: 0;
+    }
+
+    header .dropdown-menu {
+        right: 1rem;
+        top: auto;
+    }
+
+    header .navbar-expand-md .navbar-nav .nav-link {
+        padding-left: 0;
+    }
+}

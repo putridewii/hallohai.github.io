@@ -1,0 +1,119 @@
+@media screen and (max-width: 800px) and (min-width: 600px) {
+  .gigs-card h2 {
+    font-size: 0.8rem;
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .footer-links {
+    -webkit-flex-direction: column;
+  }
+
+  .navbar,
+  .userinfo-actions {
+    display: -webkit-flex;
+  }
+
+  .userinfo-actions {
+    -webkit-justify-content: center;
+  }
+
+  .userinfo-actions button {
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+  }
+
+  .dropdown-menu {
+    left: initial;
+  }
+
+  .shopweb-grid .row {
+    display: -webkit-flex;
+    -webkit-flex-wrap: wrap;
+  }
+
+  .shopweb-grid .row .col-md-3 {
+    display: -webkit-flex;
+    -webkit-flex-grow: 0;
+    -webkit-flex-shrink: 0;
+    -webkit-flex-basis: 25%;
+  }
+
+  .shopweb-toptray {
+    display: -webkit-flex;
+  }
+
+  .shopweb-toptray {
+    margin: 0 -1rem;
+  }
+
+  .shopweb-toptray > .rounded-element {
+    display: -webkit-flex;
+    margin: 0 1rem;
+  }
+
+  .row {
+    display: -webkit-flex;
+  }
+
+  .sticky-left {
+    position: -webkit-sticky;
+  }
+
+  .owl-nav {
+    display: -webkit-flex;
+  }
+
+  .profession-img-carousel .owl-nav {
+    -webkit-justify-content: space-between;
+  }
+
+  
+  .productdetail .audio-item:not(:last-of-type) {
+    margin-bottom: 2rem;
+  }
+
+  .services-grid {
+    display: -webkit-flex;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+
+  .services-grid .gigs-card {
+    margin: 0 1rem;
+  }
+
+  .checkout-top {
+    display: -webkit-flex;
+  }
+
+  .checkout-top-img {
+    -webkit-flex-shrink: 0;
+  }
+}
+
+.modal-dialog-centered {
+  display: -webkit-flex;
+  -webkit-align-items: center;
+}
+
+.d-flex {
+  display: -webkit-flex !important;
+}
+
+.justify-content-center {
+  -webkit-justify-content: center !important;
+}
+
+
+
+/* Portrait */
+@media only screen
+  and (min-device-width: 768px)
+  and (max-device-width: 1024px)
+  and (orientation: portrait)
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .userinfo-actions button {
+      padding: 0.2rem 0.8rem;
+    }
+}

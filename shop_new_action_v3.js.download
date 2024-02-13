@@ -1,0 +1,261 @@
+var loading_ring = '<div class="modal-body"><div style="text-align:center"><div style="text-align:center"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div></div></div>';
+$( "button.btn-buy" ).on( "click", function(e){
+    e.preventDefault();
+    var $this = $(this);
+    var username = $this.attr("data-username");
+    var item_slug = $this.attr("data-slug");
+	var promo_code = $this.attr('data-promo-code')
+	$( "#shopBeliModal1" ).modal( "show" );
+	$( "#shopBeliModal1 .modal-content" ).html(loading_ring);
+	$.get(base_url + username + "/p/" + item_slug + "/buy", { promo_code: promo_code },function(content) {
+		setTimeout(function() {
+			$( "#shopBeliModal1 .modal-content" ).html(content);
+		}, 500);
+	});
+});
+$( "button.btn-buy-package" ).on( "click", function(e){
+    e.preventDefault();
+    var $this = $(this);
+    var username = $this.attr("data-username");
+    var item_slug = $this.attr("data-slug");
+	var promo_code = $this.attr('data-promo-code');
+	$( "#shopBeliModal1" ).modal( "show" );
+	$( "#shopBeliModal1 .modal-content" ).html(loading_ring);
+	$.get(base_url +username + "/b/" + item_slug + "/buy", { promo_code: promo_code }, function(content) {
+		setTimeout(function() {
+			$( "#shopBeliModal1 .modal-content" ).html(content);
+			$(".item-id").prop("checked", false);
+		}, 500);
+	});
+});
+
+$( "button.btn-buy-per-item" ).on( "click", function(e){
+    e.preventDefault();
+	var $this = $(this);
+	var $button_submit = $(this);
+    var username = $this.attr("data-username");
+	var item_slug = $this.attr("data-slug");
+	var promo_code = $this.attr('data-promo-code');
+	var formatFotoArray = [];
+	$(".item-id:checked").each(function() {
+		formatFotoArray.push($(this).val());
+	});
+	var selectedFormat;
+	selectedFormat = formatFotoArray;
+	if (selectedFormat.length > 0) {
+		var format_photo = selectedFormat;
+	} else {
+		var format_photo = '';
+	} 
+	var data_post = {
+		format_photo: format_photo,
+		nan: 'nan',
+		sb_token_csrf: $( "input[name='sb_token_csrf']" ).val()
+	}
+	
+	$($button_submit).prop( "disabled", true ).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Beli Satuan');
+
+	$.post(base_url + username + "/b/" + item_slug + "/buy/items", data_post, function(response) {
+		if (response.success == 'true') {
+
+			$( "#shopBeliModal1" ).modal( "show" );
+			$( "#shopBeliModal1 .modal-content" ).html(loading_ring);
+
+			$.get(base_url + username + "/b/" + item_slug + "/buy/items/checkout", { promo_code: promo_code },function(content){
+				setTimeout(function(){
+					$("#shopBeliModal1 .modal-content").html(content);
+				}, 500);
+			});
+
+			$('.error_item_check').html('');
+			$($button_submit).prop( "disabled", false ).html('Beli Satuan');
+		} else {
+				
+			$('.error_item_check').html('Mohon centang salah satu');
+			$($button_submit).prop( "disabled", false ).html('Beli Satuan');
+		
+		}
+	}, "json")
+	.done(function(response) {
+		$( 'input[name="sb_token_csrf"]' ).val( response.token );
+		$($button_submit).prop( "disabled", false ).html('Beli Satuan')
+	})
+	.fail(function(response, e) {
+		failed_response(response, e);
+	});
+
+});
+
+$(".qty-inc").click(function(){
+	var id = $(this).attr('id');
+	var o = $(this).parents(".qty").find(".qty-counter"),
+	e = parseInt(o.text());
+	e < $('.rest-voucher-' + id).attr('data-rest') && o.text(e+1);
+	var quantity = e+1;
+	if (quantity <= $('.rest-voucher-' + id).attr('data-rest')) {
+		$('.input-number-' + id).val(quantity);
+	}
+});
+$(".qty-dec").click(function(){
+	var id = $(this).attr('id');
+	var o = $(this).parents(".qty").find(".qty-counter"),
+	e = parseInt(o.text());
+	0 < e && o.text(e-1);
+	var quantity = e-1;
+	if(quantity >= 0){
+		$('.input-number-' + id).val(quantity);
+	}
+});
+
+$( "button.btn-buy-ticket" ).on( "click", function(e){
+    e.preventDefault();
+	var $this = $(this);
+	var $button_submit = $(this);
+    var username = $this.attr("data-username");
+	var item_slug = $this.attr("data-slug");
+	var qty = $("input[name='t_qty[]']").map(function(){
+		return $(this).val();
+	}).get();
+	var event_id = $("input[name='e_id[]']").map(function(){
+		return $(this).val();
+	}).get();
+
+	var data_post = {
+		qty: qty,
+		event_id: event_id,
+		nan: 'nan',
+		sb_token_csrf: $( "input[name='sb_token_csrf']" ).val()
+	}
+	
+	$($button_submit).prop( "disabled", true ).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Beli Tiket');
+
+	$.post(base_url + username + "/e/" + item_slug + "/buy/ticket", data_post, function(response) {
+		if (response.success == 'true') {
+
+			$( "#shopBeliModal1" ).modal( "show" );
+			$( "#shopBeliModal1 .modal-content" ).html(loading_ring);
+
+			$.get(base_url + username + "/e/" + item_slug + "/buy/ticket/checkout", function(content){
+				setTimeout(function(){
+					$("#shopBeliModal1 .modal-content").html(content);
+				}, 500);
+			});
+
+			$('.error_item_check').html('');
+			$($button_submit).prop( "disabled", false ).html('Beli Tiket');
+		} else {
+				
+			$('.error_item_check').html('Masukkan jumlah tiket');
+			$($button_submit).prop( "disabled", false ).html('Beli Tiket');
+		
+		}
+	}, "json")
+	.done(function(response) {
+		$( 'input[name="sb_token_csrf"]' ).val( response.token );
+		$($button_submit).prop( "disabled", false ).html('Beli Tiket')
+	})
+	.fail(function(response, e) {
+		failed_response(response, e);
+	});
+});
+
+$("a.edit-data-user").on("click", function(e){
+	e.preventDefault();
+	$( "#shopBeliModal1" ).modal( "show" );
+	$( "#shopBeliModal1 .modal-content" ).html(loading_ring);
+	var field = $(this).attr('data-field');
+	
+	$.get(base_url + 'shop/setting/?section=' + field, function(content){
+		setTimeout(function(){
+			$("#shopBeliModal1 .modal-content").html(content);
+		}, 500);
+	});
+});
+
+$('.download-item').on('click', function() {
+    var item_id = $(this).attr('data-item-id');
+    var item_detail_id = $(this).attr('data-detail-id');
+	var file_data = $(this).attr('data-downloaded');
+	var username = $(this).attr('data-username');
+    var form_data = new FormData();
+	form_data.append("file_data", file_data);
+    $(this).attr('disabled', true);
+    
+	$.ajax({
+		xhr: function(){
+		   var xhr = new window.XMLHttpRequest();
+		   //Download progress
+		   xhr.addEventListener("progress", function(evt) {
+				if (evt.lengthComputable) {
+					// console.log('Bytes Loaded : ' + e.loaded);
+					// console.log('Total Size : ' + e.total);
+					// console.log('Percent : ' + (e.loaded / e.total));	
+					var percentComplete = evt.loaded / evt.total;
+					//Do something with download progress
+					var percent = Math.round((evt.loaded / evt.total) * 100);
+					//   $( '.progress-bar' ).attr('aria-valuenow', percent).css('width', percent + '%').text(percent + '%');
+					$('#item_detail_' + item_detail_id).html('Download ' + percent + '%');
+					console.log(percentComplete);
+				}
+		   }, false);
+		   return xhr;
+		},
+		url: base_url + 'shop/download/' + username + '/item/' + item_detail_id,
+		dataType: 'html',
+		data: form_data,
+		processData: false,
+		contentType: false,
+		type: 'post',
+		success: function(response){
+			// var res = JSON.parse(response);
+			// if(res.success == 'true'){
+				setTimeout(function(){
+					location.href = base_url + 'shop/download/' + username + '/item/' + item_detail_id;
+				}, 1000);	
+			// }else{
+			// 	$('#item_detail_' + item_detail_id).html('Download');
+			// }
+		}
+	});
+});
+
+var $owl = $('.profession-img-carousel');
+if($owl.length){
+    $owl.on('initialized.owl.carousel', function(event) {
+        var items = event.item.count;
+        items <= 4 ? $(".profession-img-carousel .owl-nav").addClass("disabled") : $(".profession-img-carousel .owl-nav").removeClass("disabled");
+    });
+	$owl.owlCarousel({
+		margin:10,
+		responsiveClass:!0,
+		responsive:{
+			0:{items:1,nav:!0},
+			360:{items:3,nav:!0},
+			600:{items:3,nav:!0},
+			1e3:{items:4,nav:!0}
+		},
+		navText:["<i class='fas fa-arrow-circle-left'></i>","<i class='fas fa-arrow-circle-right'></i>"]
+	});
+	$owl.on("changed.owl.carousel",function(o){
+		$(".profession-img-carousel .owl-nav").removeClass("disabled");
+	});
+	$(".profession-img-carousel img").height($(".profession-img-carousel .owl-item").width());
+}
+
+var $owlvid = $('.profession-vid-carousel');
+if($owlvid.length){
+	$owlvid.on('initialized.owl.carousel', function(event) {
+        var items = event.item.count;
+        items <= 3 ? $(".profession-vid-carousel .owl-nav").addClass("disabled") : $(".profession-vid-carousel .owl-nav").removeClass("disabled");
+    });
+	$owlvid.owlCarousel({
+		margin:10,
+		responsiveClass:!0,
+		responsive:{
+			0:{items:1,nav:!0},
+			360:{items:2,nav:!0},
+			600:{items:3,nav:!0},
+			1e3:{items:3,nav:!0}
+		},navText:["<i class='fas fa-arrow-circle-left'></i>","<i class='fas fa-arrow-circle-right'></i>"]
+	});
+}

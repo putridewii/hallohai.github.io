@@ -1,0 +1,121 @@
+function number_format(objek)
+{
+	a = objek.value;
+	b = a.replace(/[^\d]/g,"");
+	c = "";
+	panjang = b.length;
+	j = 0;
+	for (i = panjang; i > 0; i--) {
+		j = j + 1;
+		if (((j % 3) == 1) && (j != 1)) {
+			c = b.substr(i-1,1) + "," + c;
+		} else {
+			c = b.substr(i-1,1) + c;
+		}
+	}
+	objek.value = c;
+}
+
+function number_only(objek)
+{
+	a = objek.value;
+	b = a.replace(/[^\d]/g,"");
+	c = "";
+	panjang = b.length;
+	j = 0;
+	for (i = panjang; i > 0; i--) {
+		j = j + 1;
+		c = b.substr(i-1,1) + c;
+	}
+	objek.value = c;
+}
+
+function failed_response(response, e)
+{
+	if ( location.hostname === "localhost" || location.hostname === "127.0.0.1" ) {
+		if ( response.status == 0 ) {
+			alert( response.responseText );
+		} else if ( response.status == 404 ) {
+			alert( "Requested URL not found.\n\n" + response.responseText );
+		} else if ( response.status == 500 ) {
+			alert( "Internal Server Error.\n\n" + response.responseText );
+		} else if ( e == "parsererror") {
+			alert( "Parsing JSON Request failed.\n\n" + response.responseText );
+		} else if ( e == "timeout" ) {
+			alert( "Request Time out." );
+		} else {
+			alert( "Please refresh your browser and try again.\n\n" + response.responseText );
+		}
+	} else {
+		if ( response.status == 0 ) {
+			alert( response.responseText );
+		} else if ( response.status == 404 ) {
+			alert( "Requested URL not found." );
+		} else if ( response.status == 500 ) {
+			alert( "Internal Server Error." );
+		} else if ( e == "parsererror") {
+			alert( "Parsing JSON Request failed" );
+		} else if ( e == "timeout" ) {
+			alert( "Request Time out." );
+		} else {
+			alert( "Please refresh your browser and try again." );
+		}
+	}
+}
+
+$(function(){
+	
+	// $('#promotion_detail, #criteria, #task, #terms').trumbowyg({
+	// 	svgPath: base_url + 'assets/fonts/icons.svg',
+	// 	removeformatPasted: true,
+	// 	autogrow: true,
+	// 	autogrowOnEnter: true,
+	// 	btns: [
+	// 		['undo', 'redo'], // Only supported in Blink browsers
+	// 		['formatting'],
+	// 		['strong', 'em', 'del'],
+	// 		['link'],
+	// 		['unorderedList', 'orderedList'],
+	// 		['removeformat'],
+	// 	]
+	// });
+
+	$("#search_profile").on("keyup keypress", function(e){
+		
+		var $this = $(this);
+		
+		if ($this.val().length > 1) {
+			$.get(base_url + 'search/pro/?who=' + encodeURI($this.val()), function(response){
+				$('#results').empty();
+				$('#results').show();
+				$("#results").html(response);
+			}, 'json');
+		} else {
+			$('#results').hide();	
+			$('#results').empty();
+		}
+	});
+
+	$("#search_profile").on("focus", function(e){
+		
+		var $this = $(this);
+		
+		if ($this.val().length > 1) {
+			$.get(base_url + 'search/pro/?who=' + encodeURI($this.val()), function(response){
+				$('#results').empty();
+				$('#results').show();
+				$("#results").html(response);
+			}, 'json');
+		} else {
+			$('#results').hide();	
+			$('#results').empty();
+		}
+	});
+
+	$(document).on("blur", "#search_profile", function(){
+		setTimeout(function(){
+			$('#results').empty();
+			$('#results').hide();
+		}, 200);
+	});
+});
